@@ -7,7 +7,7 @@
 </head>
 <body>
 <x-dc>
-<template id="__bundler_thumbnail"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="20" fill="#F17B2C"></rect><g fill="#fff"><rect x="30" y="30" width="40" height="6" rx="3"></rect><rect x="30" y="47" width="40" height="6" rx="3"></rect><rect x="30" y="64" width="26" height="6" rx="3"></rect></g></svg></template>
+<template id="__bundler_thumbnail"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#FFF1E7"></rect><circle cx="50" cy="50" r="20" fill="#F17B2C"></circle><path d="M44 42.5c0-.8.6-1.5 1.4-1.6l3-.3c.7-.1 1.4.3 1.6 1l1 2.7c.2.6 0 1.3-.5 1.7l-1.6 1.3c1 2.2 2.8 4 5 5l1.3-1.6c.4-.5 1.1-.7 1.7-.5l2.7 1c.7.2 1.1.9 1 1.6l-.3 3c-.1.8-.8 1.4-1.6 1.4C50.6 58.6 41.4 49.4 44 42.5z" fill="#fff"></path></svg></template>
 <helmet>
   <link rel="stylesheet" href="_ds/alignui-design-system-99ff022e-70cd-43a2-8a70-a2d7d1cb1728/tokens/fonts.css">
   <link rel="stylesheet" href="_ds/alignui-design-system-99ff022e-70cd-43a2-8a70-a2d7d1cb1728/tokens/fig-tokens.css">
@@ -136,9 +136,11 @@
 
     <!-- User -->
     <div style="display:flex;align-items:center;gap:12px;padding:0 20px 0 16px;">
-      <div style="width:40px;height:40px;border-radius:999px;overflow:hidden;position:relative;flex:0 0 auto;">
-        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--purple-lighter);color:var(--purple-base);font:var(--label-sm);letter-spacing:var(--label-sm-spacing);">MS</div>
-        <span style="position:absolute;right:0;bottom:0;width:10px;height:10px;border-radius:999px;background:var(--state-success);border:2px solid var(--bg-white-0);"></span>
+      <div style="position:relative;flex:0 0 auto;">
+        <div style="width:40px;height:40px;border-radius:999px;overflow:hidden;">
+          <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="sidebarUserAvatar" shape="circle" src="uploads/istockphoto-1406197730-612x612 1.png" placeholder="Photo" hint-size="40px,40px" style="width:40px;height:40px;display:block;"></x-import>
+        </div>
+        <span style="position:absolute;right:0;bottom:0;width:10px;height:10px;border-radius:999px;background:var(--state-success);border:2px solid var(--bg-white-0);z-index:2;"></span>
       </div>
       <div class="lbl" style="flex:1;min-width:0;">
         <div style="display:flex;align-items:center;gap:5px;font:var(--label-md);letter-spacing:var(--label-md-spacing);color:var(--text-main-900);white-space:nowrap;">Manish Singh <i class="ri-verified-badge-fill" style="color:var(--blue-base);font-size:15px;"></i></div>
@@ -275,7 +277,7 @@
 
           <!-- Detail panel -->
           <sc-if value="{{ lead.open }}" hint-placeholder-val="{{ false }}">
-            <div style="display: grid; grid-template-columns: minmax(210px,1.15fr) minmax(190px,1.1fr) minmax(210px,1.2fr) minmax(220px,1.35fr) minmax(260px,1.6fr) 150px; gap: 16px; padding: 20px; background-color: #F1F8FF;">
+            <div style="display: grid; grid-template-columns: minmax(210px,1.15fr) minmax(190px,1.1fr) minmax(210px,1.2fr) minmax(220px,1.35fr) minmax(260px,1.6fr) 150px; gap: 16px; padding: 20px; background-color: #F1F8FF; border-radius: 0 0 12px 12px;">
               <!-- Tags -->
               <div style="display:flex;flex-direction:column;">
                 <div style="font:var(--paragraph-sm);color:var(--text-sub-500);margin-bottom:10px;">Tags</div>
@@ -1444,8 +1446,8 @@ class Component extends DCLogic {
       open: !!this.state.open[i],
       closed: !this.state.open[i],
       rowStyle: this.state.open[i]
-        ? 'outline:1px solid var(--stroke-soft-200);outline-offset:-1px;border-radius:12px;overflow:hidden;'
-        : 'border-bottom:1px solid var(--stroke-soft-200);',
+        ? 'outline:1px solid var(--stroke-soft-200);outline-offset:-1px;border-radius:12px;border-bottom:1px solid transparent;'
+        : 'outline:1px solid transparent;outline-offset:-1px;border-radius:12px;border-bottom:1px solid var(--stroke-soft-200);',
       toggle: (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.setState(s => ({ open: s.open[i] ? {} : { [i]: true } })); },
       openDetail: (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.setState({ view: 'detail', activeLead: i, callPhase: 'none', revealed: 0, typing: false, notesReady: false, callSecs: 0 }); },
     }));
