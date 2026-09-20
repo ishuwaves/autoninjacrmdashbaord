@@ -9,6 +9,7 @@
 <x-dc>
 <template id="__bundler_thumbnail"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#FFF1E7"></rect><circle cx="50" cy="50" r="20" fill="#F17B2C"></circle><path d="M44 42.5c0-.8.6-1.5 1.4-1.6l3-.3c.7-.1 1.4.3 1.6 1l1 2.7c.2.6 0 1.3-.5 1.7l-1.6 1.3c1 2.2 2.8 4 5 5l1.3-1.6c.4-.5 1.1-.7 1.7-.5l2.7 1c.7.2 1.1.9 1 1.6l-.3 3c-.1.8-.8 1.4-1.6 1.4C50.6 58.6 41.4 49.4 44 42.5z" fill="#fff"></path></svg></template>
 <helmet>
+  <link rel="icon" type="image/svg+xml" href="uploads/16x16.svg">
   <link rel="stylesheet" href="_ds/alignui-design-system-99ff022e-70cd-43a2-8a70-a2d7d1cb1728/tokens/fonts.css">
   <link rel="stylesheet" href="_ds/alignui-design-system-99ff022e-70cd-43a2-8a70-a2d7d1cb1728/tokens/fig-tokens.css">
   <link rel="stylesheet" href="_ds/alignui-design-system-99ff022e-70cd-43a2-8a70-a2d7d1cb1728/tokens/typography.css">
@@ -41,6 +42,7 @@
     .tc-sb:not(.expanded) .sec-label{ text-align:left;padding:0 24px; }
     .tc-sb .nav-item{ position:relative;display:flex;align-items:center;gap:14px;height:44px;margin:0 12px;padding:0 12px;border-radius:10px;color:var(--text-sub-500);cursor:pointer;transition:background .15s,color .15s; }
     .tc-sb:not(.expanded) .nav-item{ margin:0 12px;padding:0 12px;justify-content:flex-start;gap:0; }
+    .tc-sb:not(.expanded) .tc-idrow{ justify-content:flex-start; }
     .tc-sb .nav-item .nav-ico{ font-size:22px;width:24px;flex:0 0 auto;display:flex;align-items:center;justify-content:center; }
     .tc-sb .nav-item .nav-txt{ font:var(--label-md);letter-spacing:var(--label-md-spacing);color:var(--text-main-900); }
     .tc-sb .nav-item:hover{ background:#FAFAFA; }
@@ -57,7 +59,16 @@
     .tc-shim-text{ background:linear-gradient(90deg, currentColor 30%, #FFC79A 45%, #FFC79A 55%, currentColor 70%); background-size:200% 100%; -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; animation:tcshimmer 1.6s linear infinite; }
     .tc-shim.d1{ animation-delay:.2s; }
     .tc-shim.d2{ animation-delay:.4s; }
+    @keyframes tcblink{ 0%,49%{ opacity:1; } 50%,100%{ opacity:0; } }
+    .tc-cursor{ display:inline-block;width:2px;height:0.95em;margin-left:2px;vertical-align:-2px;background:#F97720;border-radius:1px;animation:tcblink 0.9s steps(1) infinite; }
+    @keyframes tcthinkdot{ 0%,80%,100%{ transform:scale(0.6);opacity:0.4; } 40%{ transform:scale(1);opacity:1; } }
+    .tc-think-dot{ width:6px;height:6px;border-radius:999px;background:#F97720;display:inline-block;animation:tcthinkdot 1.2s ease-in-out infinite; }
+    @keyframes tcfade{ from{opacity:0;} to{opacity:1;} }
+    .tc-fade{ animation:tcfade .25s ease-in both; }
+    .tc-think-dot.d1{ animation-delay:.16s; }
+    .tc-think-dot.d2{ animation-delay:.32s; }
     @keyframes tcbubblein{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:translateY(0); } }
+    .tc-njscroll > *{ animation:tcbubblein .34s cubic-bezier(.22,.61,.36,1) both; }
     .tc-bubble{ animation:tcbubblein .32s ease-out both; }
     @keyframes tcaisheen{ 0%{ background-position:0% 50%; } 100%{ background-position:200% 50%; } }
     .tc-aitag{ position:relative; display:inline-flex; align-items:center; gap:5px; padding:5px 13px; border-radius:8px; font:var(--label-xs); letter-spacing:var(--label-xs-spacing); border:0.7px solid transparent; background:linear-gradient(#fff,#fff) padding-box, linear-gradient(90deg,#FE6A0C,#F55B9B,#B93FE0,#F55B9B,#FE6A0C) border-box; background-size:auto, 200% 100%; animation:tcaisheen 3s linear infinite; }
@@ -83,9 +94,13 @@
     @media (max-width:1300px){ .tc-stats{ grid-template-columns:repeat(3,1fr); } }
     @media (max-width:640px){ .tc-stats{ grid-template-columns:repeat(2,1fr); } }
     .tc-detail-cols{ overflow-x:auto; }
-    @media (max-width:1300px){
-      .tc-detail-left{ width:340px !important;flex-basis:340px !important; }
-      .tc-detail-right{ width:360px !important;flex-basis:360px !important; }
+    @media (max-width:1400px){
+      .tc-detail-left{ width:360px !important;flex-basis:360px !important; }
+      .tc-chatbox{ min-width:460px !important; }
+    }
+    @media (max-width:1120px){
+      .tc-detail-left{ width:300px !important;flex-basis:300px !important; }
+      .tc-chatbox{ min-width:400px !important; margin-right:16px !important; }
     }
   </style>
 </helmet>
@@ -96,7 +111,7 @@
   <aside class="tc-sb {{ sbClass }}" style="flex:0 0 auto;border-right:1px solid var(--stroke-soft-200);display:flex;flex-direction:column;padding:20px 0;gap:16px;overflow:hidden;">
 
     <!-- Brand -->
-    <div style="display:flex;align-items:center;gap:12px;padding:0 20px 0 12px;">
+    <div class="tc-idrow" style="display:flex;align-items:center;gap:12px;padding:0 20px 0 12px;">
       <div style="width:48px;height:48px;border-radius:999px;overflow:hidden;flex:0 0 auto;background:url('apex-mr90nmx5.png') center / cover no-repeat;"></div>
       <div class="lbl" style="min-width:0;">
         <div style="font:var(--label-md);letter-spacing:var(--label-md-spacing);color:var(--text-main-900);">Vinayak Toyota</div>
@@ -107,14 +122,14 @@
     <div style="height:1px;background:var(--stroke-soft-200);margin:0 20px;flex:0 0 auto;"></div>
 
     <!-- MAIN -->
-    <div style="display:flex;flex-direction:column;gap:6px;flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;">
-      <span class="sec-label" style="margin-bottom:2px;">Main</span>
+    <div style="display: flex; flex-direction: column; gap: 6px; flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; align-items: flex-start">
+      <span class="sec-label" style="margin-bottom: 2px; text-align: left">Main</span>
       <div class="nav-item active" style="width: 44px"><span class="nav-ico"><i class="ri-phone-fill"></i></span><span class="nav-txt lbl">Today's Calls</span></div>
-      <div class="nav-item"><span class="nav-ico"><i class="ri-bar-chart-2-line"></i></span><span class="nav-txt lbl">Total Leads</span></div>
-      <div class="nav-item"><span class="nav-ico"><i class="ri-pie-chart-2-line"></i></span><span class="nav-txt lbl">Dashboard</span></div>
-      <div class="nav-item"><span class="nav-ico"><i class="ri-file-list-3-line"></i></span><span class="nav-txt lbl">Reports</span></div>
-      <div class="nav-item"><span class="nav-ico"><i class="ri-line-chart-line"></i></span><span class="nav-txt lbl">Performance</span></div>
-      <div class="nav-item"><span class="nav-ico"><i class="ri-chat-smile-3-line"></i></span><span class="nav-txt lbl">Communications</span></div>
+      <div class="nav-item" style="width: 44px"><span class="nav-ico"><i class="ri-bar-chart-2-line"></i></span><span class="nav-txt lbl">Total Leads</span></div>
+      <div class="nav-item" style="width: 44px"><span class="nav-ico"><i class="ri-pie-chart-2-line"></i></span><span class="nav-txt lbl">Dashboard</span></div>
+      <div class="nav-item" style="width: 44px"><span class="nav-ico"><i class="ri-file-list-3-line"></i></span><span class="nav-txt lbl">Reports</span></div>
+      <div class="nav-item" style="width: 44px"><span class="nav-ico"><i class="ri-line-chart-line"></i></span><span class="nav-txt lbl">Performance</span></div>
+      <div class="nav-item" style="width: 44px"><span class="nav-ico"><i class="ri-chat-smile-3-line"></i></span><span class="nav-txt lbl">Communications</span></div>
     </div>
 
     <!-- OTHER -->
@@ -135,7 +150,7 @@
     <div style="height:1px;background:var(--stroke-soft-200);margin:0 20px;flex:0 0 auto;"></div>
 
     <!-- User -->
-    <div style="display:flex;align-items:center;gap:12px;padding:0 20px 0 16px;">
+    <div class="tc-idrow" style="display:flex;align-items:center;gap:12px;padding:0 20px 0 16px;">
       <div style="position:relative;flex:0 0 auto;">
         <div style="width:40px;height:40px;border-radius:999px;overflow:hidden;">
           <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="sidebarUserAvatar" shape="circle" src="uploads/istockphoto-1406197730-612x612 1.png" placeholder="Photo" hint-size="40px,40px" style="width:40px;height:40px;display:block;"></x-import>
@@ -370,7 +385,7 @@
     <div style="flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;">
 
       <!-- Breadcrumb bar -->
-      <div style="display:flex;align-items:center;gap:10px;padding:18px 28px;border-bottom:1px solid var(--stroke-soft-200);flex:0 0 auto;">
+      <div style="display: flex; align-items: center; gap: 10px; padding: 18px 28px; border-bottom: 1px solid var(--stroke-soft-200); flex: 0 0 auto; border-width: 0px">
         <button onClick="{{ backToList }}" class="tc-chev" style="width:32px;height:32px;color:var(--icon-strong-900);"><i class="ri-arrow-left-s-line"></i></button>
         <div style="display:flex;align-items:center;gap:8px;font:var(--label-md);letter-spacing:var(--label-md-spacing);">
           <span onClick="{{ backToList }}" style="color:var(--text-sub-500);cursor:pointer;">All Leads</span>
@@ -383,13 +398,14 @@
       <div class="tc-detail-cols" style="flex:1;min-height:0;display:flex;">
 
         <!-- LEFT COLUMN -->
-        <section class="tc-detail-left" style="width:420px;flex:0 0 420px;border-right:1px solid var(--stroke-soft-200);display:flex;flex-direction:column;overflow-y:auto;">
+        <section class="tc-detail-left" style="width:420px;flex:0 0 420px;display:flex;flex-direction:column;overflow-y:auto;">
 
           <!-- Customer card -->
-          <div style="padding:20px 24px;background:var(--bg-white-0);border-bottom:1px solid var(--stroke-soft-200);">
+          <div style="padding: 20px 24px; background: var(--bg-white-0); border-bottom: 1px solid var(--stroke-soft-200); border-width: 0px">
+            <div style="background: var(--bg-weak-100); border: 1px solid var(--stroke-soft-200); border-radius: 12px; padding: 16px; border-width: 1px">
             <div style="display:flex;align-items:center;gap:14px;">
               <div style="position:relative;flex:0 0 auto;">
-                <div style="width:52px;height:52px;border-radius:999px;background:var(--blue-lighter);color:var(--blue-base);display:flex;align-items:center;justify-content:center;font:var(--label-lg);letter-spacing:var(--label-lg-spacing);">{{ detail.initials }}</div>
+                <div style="width:52px;height:52px;border-radius:999px;overflow:hidden;flex:0 0 auto;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="custDetailAvatar" shape="circle" src="uploads/Avatar [1.0].png" placeholder="Photo" hint-size="52px,52px" style="width:52px;height:52px;display:block;"></x-import></div>
               </div>
               <div style="flex:1;min-width:0;">
                 <div style="font:var(--label-lg);letter-spacing:var(--label-lg-spacing);color:var(--text-main-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ detail.name }}</div>
@@ -399,7 +415,7 @@
             </div>
 
             <!-- Policy status strip -->
-            <div style="display:flex;align-items:center;gap:12px;margin-top:16px;padding:12px 14px;border-radius:12px;background:var(--bg-weak-100);">
+            <div style="display: none; align-items: center; gap: 12px; margin-top: 16px; padding: 12px 14px; border-radius: 12px; background: var(--bg-weak-100)">
               
               <div style="display:flex;align-items:center;gap:6px;">
                 <span style="font: var(--paragraph-xs); color: var(--text-soft-400); font-size: 14px">Expires</span>
@@ -411,13 +427,14 @@
               </div>
             </div>
 
-            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px;">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:20px;">
               <sc-for list="{{ detail.tags }}" as="t" hint-placeholder-count="3">
-                <span class="{{ t.cls }}" style="padding-top: 4px; padding-bottom: 4px; padding-left: 8px; padding-right: 8px; border-width: 1px; border-style: solid; border-color: var(--icon-disabled-300); border-radius: 8px; color: var(--neutral-600)"><sc-if value="{{ t.dot }}" hint-placeholder-val="{{ false }}"><span style="width:6px;height:6px;border-radius:999px;background:{{ t.dot }};"></span></sc-if><span style="font-size: 14px">{{ t.label }}</span></span>
+                <span class="{{ t.cls }}" style="padding-top: 4px; padding-bottom: 4px; padding-left: 8px; padding-right: 8px; border-width: 1px; border-style: solid; border-color: var(--icon-disabled-300); border-radius: 8px; color: var(--neutral-600); background-color: var(--bg-white-0)"><sc-if value="{{ t.dot }}" hint-placeholder-val="{{ false }}"><span style="width:6px;height:6px;border-radius:999px;background:{{ t.dot }};"></span></sc-if><span style="font-size: 14px; color: #CF0027">{{ t.label }}</span></span>
               </sc-for>
               <span style="display:inline-flex;align-items:center;justify-content:center;width:26px;height:24px;border-radius:8px;border:1px solid var(--stroke-soft-200);background:var(--bg-white-0);color:var(--icon-soft-400);cursor:pointer;"><i class="ri-add-line" style="font-size:14px;"></i></span>
             </div>
-            <div style="display:flex;gap:10px;margin-top:16px;">
+            </div>
+            <div style="display: none; gap: 10px; margin-top: 16px">
               <button style="flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;border-radius:10px;border:1px solid var(--stroke-soft-200);background:var(--bg-white-0);font:var(--label-sm);letter-spacing:var(--label-sm-spacing);color:var(--orange-base);cursor:pointer;"><i class="ri-folder-3-line"></i>Documents</button>
               <button style="flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;border-radius:10px;border:1px solid var(--stroke-soft-200);background:var(--bg-white-0);font:var(--label-sm);letter-spacing:var(--label-sm-spacing);color:var(--orange-base);cursor:pointer;"><i class="ri-user-line"></i>Profile Details</button>
             </div>
@@ -438,14 +455,14 @@
           </div>
 
           <!-- Tabs -->
-          <div style="display:flex;gap:24px;padding:0 24px;border-bottom:1px solid var(--stroke-soft-200);">
+          <div style="margin:0 24px;display:flex;gap:24px;border-bottom:1px solid var(--stroke-soft-200);">
             <div style="padding: 14px 0; font: var(--label-sm); letter-spacing: var(--label-sm-spacing); color: var(--text-main-900); border-bottom: 2px solid var(--orange-base); cursor: pointer; font-size: 16px; width: 100%; text-align: center">Insurance Details</div>
             <div style="padding: 14px 0; font: var(--label-sm); letter-spacing: var(--label-sm-spacing); color: var(--text-soft-400); cursor: pointer; font-size: 16px; width: 100%; text-align: center">Service Details</div>
           </div>
 
           <!-- Insurance grid -->
           <div style="padding:20px 24px;">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px 16px;background:var(--bg-weak-100);border-radius:12px;padding:18px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px 16px; border-radius: 12px; padding: 18px; background-color: #F6F6F6">
               <div><div style="font:var(--paragraph-sm);color:var(--text-sub-500);margin-bottom:6px;">Current Policy Expiry</div><div style="font:var(--label-sm);letter-spacing:var(--label-sm-spacing);color:var(--text-main-900);">{{ detail.polEnd }}</div></div>
               <div><div style="font:var(--paragraph-sm);color:var(--text-sub-500);margin-bottom:6px;">Gross Total Premium</div><div style="font:var(--label-sm);letter-spacing:var(--label-sm-spacing);color:var(--text-main-900);">{{ detail.premium }}</div></div>
               <div><div style="font:var(--paragraph-sm);color:var(--text-sub-500);margin-bottom:6px;">Last Policy Issued on</div><div style="font:var(--label-sm);letter-spacing:var(--label-sm-spacing);color:var(--text-main-900);">{{ detail.lastIssued }}</div></div>
@@ -465,11 +482,11 @@
 
         <!-- MIDDLE COLUMN -->
         <sc-if value="{{ showComm }}" hint-placeholder-val="{{ true }}">
-        <section style="flex:1 1 380px; min-width:380px; display: flex; flex-direction: column; background-color: #ECF2F9">
+        <section class="tc-chatbox" style="flex:1 1 0; min-width:480px; position:relative; margin:16px 32px 16px 0; border:1px solid var(--stroke-soft-200); border-radius:16px; overflow:hidden; display: flex; flex-direction: column; background-color: #ECF2F9">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 24px;border-bottom:1px solid var(--stroke-soft-200);background:var(--bg-white-0);flex:0 0 auto;">
             <div style="display:flex;align-items:center;gap:10px;font:var(--label-md);letter-spacing:var(--label-md-spacing);color:var(--text-main-900);"><i class="ri-chat-3-line" style="color:var(--icon-sub-500);font-size:20px;"></i>Communication</div>
             <div style="display:flex;align-items:center;gap:12px;">
-              <button onClick="{{ startCall }}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0 16px;border-radius:10px;border:1px solid var(--stroke-soft-200);background:var(--bg-white-0);font:var(--label-sm);letter-spacing:var(--label-sm-spacing);color:var(--orange-base);cursor:pointer;"><i class="ri-phone-line"></i>Call</button>
+              <button onClick="{{ startCall }}" style="display:flex;align-items:center;justify-content:center;min-width:132px;gap:8px;height:40px;padding:0 16px;border-radius:10px;border:1px solid var(--stroke-soft-200);background:var(--bg-white-0);font:var(--label-sm);letter-spacing:var(--label-sm-spacing);color:var(--orange-base);cursor:pointer;"><i class="ri-phone-line"></i>Call</button>
               <div style="width:1px;height:24px;background:var(--stroke-soft-200);"></div>
               <button title="WhatsApp" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;border:1px solid var(--stroke-soft-200);background:var(--bg-white-0);color:var(--orange-base);font-size:18px;cursor:pointer;"><i class="ri-whatsapp-line"></i></button>
               <button title="Mail" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;border:1px solid var(--stroke-soft-200);background:var(--bg-white-0);color:var(--orange-base);font-size:18px;cursor:pointer;"><i class="ri-mail-line"></i></button>
@@ -477,7 +494,7 @@
             </div>
           </div>
           <sc-if value="{{ commEmpty }}" hint-placeholder-val="{{ true }}">
-          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;">
+          <div class="tc-chatbody" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px max(calc(30% + 32px), 312px) 24px 24px;">
             <svg width="96" height="96" viewBox="0 0 107 107" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:20px;">
               <path d="M13.3813 12.2987H64.5933C66.33 12.2988 67.815 12.916 69.0522 14.1532C70.2894 15.3904 70.9067 16.8754 70.9067 18.6122V57.0214C70.9066 58.7579 70.2891 60.2423 69.0522 61.4794C67.815 62.7166 66.33 63.3348 64.5933 63.3348H22.6938C20.807 63.3348 18.9968 64.0837 17.6626 65.4178L12.3589 70.7216C11.8618 71.2186 11.3336 71.5185 10.7739 71.6278C10.2144 71.7371 9.61564 71.6582 8.9751 71.3837C8.33446 71.1091 7.85905 70.729 7.54346 70.246C7.22786 69.7629 7.06791 69.1703 7.06787 68.4637V18.6122C7.06789 16.8753 7.68511 15.3905 8.92236 14.1532C10.1596 12.9159 11.6445 12.2987 13.3813 12.2987Z" fill="url(#paint0_linear_121_4674)" fill-opacity="0.5" stroke="url(#paint1_linear_121_4674)" stroke-width="0.175667"></path>
               <path d="M83.4748 80.3354C85.3384 80.3354 87.1257 81.0757 88.4434 82.3935L93.747 87.6971C94.7606 88.7106 95.9208 88.9374 97.2278 88.3772C98.5348 87.8171 99.1882 86.8169 99.1882 85.3766V35.5253C99.1882 33.7649 98.5614 32.2579 97.3078 31.0043C96.0542 29.7507 94.5472 29.1239 92.7868 29.1239H41.5753C39.8149 29.1239 38.3079 29.7507 37.0543 31.0043C35.8006 32.2579 35.1738 33.7649 35.1738 35.5253V73.934C35.1738 75.6944 35.8006 77.2014 37.0543 78.455C38.3079 79.7086 39.8149 80.3354 41.5753 80.3354H83.4748Z" fill="url(#paint2_linear_121_4674)" fill-opacity="0.8"></path>
@@ -493,7 +510,7 @@
           </sc-if>
 
           <sc-if value="{{ commHasMsgs }}" hint-placeholder-val="{{ false }}">
-          <div style="flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:20px;">
+          <div class="tc-chatbody" style="flex:1;overflow-y:auto;padding:24px max(calc(30% + 32px), 312px) 24px 24px;display:flex;flex-direction:column;gap:20px;">
             <sc-for list="{{ visibleMsgs }}" as="m" hint-placeholder-count="1">
               <sc-if value="{{ m.isDocCard }}" hint-placeholder-val="{{ false }}">
                 <div style="display:flex;justify-content:flex-end;">
@@ -538,28 +555,26 @@
             </sc-for>
           </div>
           </sc-if>
-        </section>
 
-        <!-- RIGHT COLUMN -->
-        <section class="tc-detail-right" style="width:440px;flex:0 0 440px;border-left:1px solid var(--stroke-soft-200);display:flex;flex-direction:column;overflow-y:auto;padding:20px;gap:18px;background:var(--bg-white-0);">
+          <!-- OVERVIEW / NINJA (floating) -->
+          <section class="tc-detail-right" style="position:absolute;top:84px;right:16px;bottom:16px;width:30%;min-width:280px;border:1px solid var(--stroke-soft-200);border-radius:16px;box-shadow:var(--shadow-regular-md);display:flex;flex-direction:column;overflow-y:auto;padding:20px;gap:18px;background:var(--bg-white-0);z-index:5;">
           <div style="display:flex;gap:4px;background:var(--bg-weak-100);border-radius:10px;padding:4px;">
             <div onClick="{{ setOverview }}" style="{{ ovSeg }}"><i class="{{ ovIconCls }}"></i>Overview</div>
             <div onClick="{{ setNinja }}" style="{{ njSeg }}"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex:0 0 auto;color:{{ njIcon }};"><g clip-path="url(#clip0_185_842)"><path d="M13.0824 4.32045L13.3304 4.7718C13.3745 4.85219 13.3153 4.95037 13.2239 4.94905L10.2066 5.09665C9.98561 5.10719 9.79091 5.2449 9.70671 5.44982L8.96934 7.24469C8.90159 7.35473 8.74109 7.35078 8.6786 7.23745L8.4714 6.85923C7.73205 5.51242 7.77152 3.87107 8.57467 2.56116C8.75096 2.27387 9.06669 2.10058 9.40413 2.10519C10.9387 2.1276 12.3431 2.97298 13.0824 4.32045Z" fill="currentColor"></path><path d="M16.7001 9.59907L16.4251 10.0346C16.3765 10.1124 16.262 10.1077 16.2186 10.0267L14.6327 7.45168C14.5169 7.26323 14.3025 7.15912 14.0828 7.18416L12.1581 7.40358C12.0292 7.39765 11.9548 7.25467 12.0239 7.14529L12.2541 6.78091C13.0744 5.4822 14.5281 4.72379 16.0614 4.79627C16.3988 4.81208 16.7027 5.00449 16.8612 5.30363C17.5828 6.66033 17.5216 8.30102 16.7007 9.59973L16.7001 9.59907Z" fill="currentColor"></path><path d="M14.1094 15.439L13.5951 15.4489C13.5036 15.4509 13.4438 15.3527 13.4878 15.2723L14.7606 12.5279C14.854 12.327 14.8225 12.0904 14.6811 11.9204L13.4378 10.432C13.3721 10.3206 13.4503 10.1796 13.5793 10.1776L14.0101 10.1697C15.5447 10.1407 16.9761 10.9387 17.7601 12.2604C17.9325 12.551 17.9397 12.9114 17.7779 13.2086C17.0445 14.5587 15.644 15.4107 14.1094 15.4397V15.439Z" fill="currentColor"></path><path d="M7.46082 15.3969L7.24901 14.9277C7.21152 14.8441 7.27729 14.7505 7.36873 14.7591L10.3879 14.846C10.609 14.8526 10.8135 14.7301 10.9135 14.5324L11.7877 12.8008C11.8633 12.696 12.0238 12.7125 12.0771 12.8304L12.2547 13.2231C12.8875 14.6233 12.7211 16.2568 11.8186 17.5001C11.62 17.7736 11.2924 17.9225 10.9563 17.8909C9.42824 17.7492 8.0936 16.7971 7.46082 15.3962V15.3969Z" fill="currentColor"></path><path d="M3.74729 10.2975L4.02224 9.86196C4.07092 9.78421 4.18537 9.78882 4.22879 9.86987L5.8147 12.4449C5.93047 12.6333 6.1449 12.7374 6.3646 12.7124L8.28927 12.493C8.4182 12.4989 8.49253 12.6419 8.42346 12.7513L8.19323 13.1157C7.37298 14.4144 5.91928 15.1728 4.386 15.1003C4.04855 15.0845 3.74466 14.8921 3.58613 14.5929C2.86455 13.2362 2.92572 11.5956 3.74663 10.2968L3.74729 10.2975Z" fill="currentColor"></path><path d="M6.60571 4.63879L7.11944 4.66712C7.21087 4.67239 7.26284 4.77452 7.2135 4.85162L5.74205 7.49385C5.63417 7.68757 5.64798 7.92543 5.77691 8.10532L6.90698 9.68209C6.9642 9.79806 6.87606 9.93247 6.74714 9.92523L6.31695 9.90151C4.78497 9.81717 3.41547 8.91512 2.73138 7.53931C2.58075 7.23687 2.60048 6.87711 2.78335 6.59246C3.61412 5.30033 5.07374 4.55445 6.60637 4.63879H6.60571Z" fill="currentColor"></path><path d="M10.5631 8.84141L10.6904 9.08999C10.8318 9.36559 11.0562 9.58823 11.3324 9.72657L11.5558 9.83897C11.586 9.8541 11.586 9.89842 11.5558 9.91355L11.2515 10.0649C11.0195 10.1805 10.8318 10.3686 10.7163 10.6009L10.5642 10.9079C10.5491 10.9381 10.506 10.9392 10.4908 10.9079L10.3161 10.5761C10.2092 10.374 10.0452 10.2086 9.84457 10.1005L9.49499 9.91247C9.46586 9.89734 9.46586 9.85518 9.49499 9.83897L9.85643 9.64227C10.0377 9.54392 10.1866 9.39477 10.2869 9.21428L10.4919 8.84033C10.5081 8.81115 10.5502 8.81223 10.5653 8.84033L10.5631 8.84141Z" fill="currentColor"></path></g><defs><clipPath id="clip0_185_842"><rect width="15.2632" height="15.7895" fill="white" transform="translate(2.63135 2.10522)"></rect></clipPath></defs></svg>NinjaAI</div>
           </div>
 
           <sc-if value="{{ rtOverview }}" hint-placeholder-val="{{ true }}">
-          <div style="display: flex; flex-direction: column; gap: 32px">
-          <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; border-radius: 10px; background: var(--orange-lighter); border: 1px solid var(--orange-light); border-color: #F2AE40">
-            <div style="display: flex; align-items: center; gap: 10px; font: var(--label-sm); letter-spacing: var(--label-sm-spacing); color: #BF6A02"><i class="ri-error-warning-line" style="color: #BF6A02; font-size: 18px"></i>Policy Status: Expiring</div>
-            <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; color: #fff; font: var(--label-xs); letter-spacing: var(--label-xs-spacing); background-color: #F2AE40"><i class="ri-time-line" style="font-size:13px;"></i>In 4 Days</span>
+          <div class="tc-fade" style="display: flex; flex-direction: column; gap: 24px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-radius:12px;background:var(--orange-lighter);border:1px solid #F2AE40;">
+            <div style="display:flex;align-items:center;gap:10px;font:var(--label-sm);letter-spacing:var(--label-sm-spacing);color:#BF6A02;"><i class="ri-error-warning-line" style="color:#BF6A02;font-size:18px;"></i>Policy Status: Expiring</div>
+            <span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;color:#fff;font:var(--label-xs);letter-spacing:var(--label-xs-spacing);background-color:#F2AE40;"><i class="ri-time-line" style="font-size:13px;"></i>In 4 Days</span>
           </div>
-
           <div>
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
               <span style="font:var(--subheading-xs);letter-spacing:var(--subheading-xs-spacing);text-transform:uppercase;color:var(--text-soft-400);">Previous Remarks</span>
               <span style="font:var(--paragraph-xs);color:var(--text-soft-400);">{{ detail.remarkMeta }}</span>
             </div>
-            <div style="background:var(--bg-weak-100);border-radius:10px;padding:12px 14px;font:var(--paragraph-sm);font-style:italic;color:var(--text-sub-500);">{{ detail.remark }}</div>
+            <div style="background:var(--bg-white-0);border:1px solid var(--stroke-soft-200);border-radius:10px;padding:12px 14px;font:var(--paragraph-sm);font-style:italic;color:var(--text-sub-500);">{{ detail.remark }}</div>
           </div>
 
           <div>
@@ -567,7 +582,7 @@
             <div style="border:1px solid var(--stroke-soft-200);border-radius:12px;padding:16px;margin-top:10px;display:flex;flex-direction:column;gap:18px;">
               <div>
                 <div style="font:var(--label-sm);letter-spacing:var(--label-sm-spacing);color:var(--text-main-900);margin-bottom:8px;">Opening Lines</div>
-                <div style="background:var(--blue-lighter);border:1px solid var(--blue-light);border-radius:10px;padding:12px 14px;font:var(--paragraph-sm);color:var(--text-sub-500);">“Hi {{ detail.firstName }}, I'm Priya from Vinayak Toyota. I'm calling regarding the renewal of your {{ detail.vehicle }} insurance policy, which expires on {{ detail.polEnd }}. Is this a good time to talk?”</div>
+                <div style="border: 1px solid var(--blue-light); border-radius: 10px; padding: 12px 14px; font: var(--paragraph-sm); color: var(--text-sub-500); background-color: #EDF6FF; border-color: #C2D6FF">“Hi {{ detail.firstName }}, I'm Priya from Vinayak Toyota. I'm calling regarding the renewal of your {{ detail.vehicle }} insurance policy, which expires on {{ detail.polEnd }}. Is this a good time to talk?”</div>
               </div>
               <div>
                 <div style="font:var(--label-sm);letter-spacing:var(--label-sm-spacing);color:var(--text-main-900);margin-bottom:10px;">Key points to cover</div>
@@ -596,12 +611,12 @@
           </sc-if>
 
           <sc-if value="{{ rtNinja }}" hint-placeholder-val="{{ false }}">
-            <div style="flex:1;min-height:0;display:flex;flex-direction:column;">
+            <div class="tc-fade" style="flex:1;min-height:0;display:flex;flex-direction:column;">
 
               <sc-if value="{{ njLanding }}" hint-placeholder-val="{{ true }}">
               <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 8px 0; padding-top: 64px">
-                <h2 style="margin: 0; font: var(--title-h3); letter-spacing: var(--title-h3-spacing); color: var(--text-main-900); font-size: 24px">How can i help<br>you <span style="color:var(--text-soft-400);">Manish?</span></h2>
-                <p style="margin:16px 0 0;font:var(--paragraph-md);color:var(--text-sub-500);max-width:340px;">You can ask about product concerns, services, quotes or best offers.</p>
+                <h2 style="margin: 0; font: var(--title-h3); letter-spacing: var(--title-h3-spacing); color: var(--text-main-900); font-size: 24px; height: 40px">How can i help you <span style="color: var(--text-soft-400);">Manish?</span></h2>
+                <p style="margin:8px 0 0;font:var(--paragraph-md);color:var(--text-sub-500);max-width:340px;">You can ask about product concerns, services, quotes or best offers.</p>
                 <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:28px;">
                   <div class="tc-quickpill" style="display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border:1px solid var(--stroke-soft-200);border-radius:10px;background:var(--bg-white-0);font:var(--label-sm);letter-spacing:var(--label-sm-spacing);color:var(--text-main-900);cursor:pointer;"><i class="ri-umbrella-fill" style="color:var(--icon-strong-900);font-size:18px;"></i>Coverage Explanation</div>
                   <div class="tc-quickpill" style="display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border:1px solid var(--stroke-soft-200);border-radius:10px;background:var(--bg-white-0);font:var(--label-sm);letter-spacing:var(--label-sm-spacing);color:var(--text-main-900);cursor:pointer;"><i class="ri-star-fill" style="color:var(--yellow-base);font-size:18px;"></i>Premium Objections</div>
@@ -615,11 +630,11 @@
               </sc-if>
 
               <sc-if value="{{ njActive }}" hint-placeholder-val="{{ false }}">
-              <div ref="{{ setNjScrollRef }}" style="flex: 1; min-height: 0; overflow-y: auto; padding: 42px 2px 16px; display: flex; flex-direction: column; gap: 18px; padding-bottom: 64px">
+              <div class="tc-njscroll" ref="{{ setNjScrollRef }}" style="flex: 1; min-height: 0; overflow-y: auto; padding: 42px 2px 16px; display: flex; flex-direction: column; gap: 18px; padding-bottom: 64px">
                 <sc-for list="{{ njLog }}" as="e" hint-placeholder-count="4">
                   <sc-if value="{{ e.isUser }}" hint-placeholder-val="{{ false }}">
                     <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
-                      <div style="max-width: 85%; color: #FF6600; border-radius: 14px 14px 4px 14px; padding: 10px 14px; font: var(--paragraph-sm); background-color: #FAFAFA">{{ e.text }}</div>
+                      <div style="max-width: 85%; color: #F17B2C; border-radius: 14px 14px 4px 14px; padding: 10px 14px; font: var(--paragraph-sm); background-color: #FAFAFA">{{ e.text }}</div>
                       <span style="font:var(--paragraph-xs);color:var(--text-soft-400);">{{ e.time }}</span>
                     </div>
                   </sc-if>
@@ -633,11 +648,17 @@
                       <div style="font:var(--paragraph-sm);color:var(--text-sub-500);">{{ e.note }}</div>
                     </div>
                   </sc-if>
+                  <sc-if value="{{ e.isThinking }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;gap:10px;align-items:center;">
+                      <span style="flex:0 0 auto;width:6px;height:6px;border-radius:999px;margin-top:0;background-color:#F97720;"></span>
+                      <span style="display:inline-flex;align-items:center;gap:4px;"><span class="tc-think-dot"></span><span class="tc-think-dot d1"></span><span class="tc-think-dot d2"></span></span>
+                    </div>
+                  </sc-if>
                   <sc-if value="{{ e.isAi }}" hint-placeholder-val="{{ false }}">
                     <div style="display:flex;gap:10px;">
                       <span style="flex: 0 0 auto; width: 6px; height: 6px; border-radius: 999px; margin-top: 7px; background-color: #F97720"></span>
                       <div style="flex:1;min-width:0;">
-                        <div style="font:var(--paragraph-sm);color:var(--text-main-900);">{{ e.text }}</div>
+                        <div style="font:var(--paragraph-sm);color:var(--text-main-900);">{{ e.text }}<sc-if value="{{ e.streaming }}" hint-placeholder-val="{{ false }}"><span class="tc-cursor"></span></sc-if></div>
                         <sc-if value="{{ e.bullets }}" hint-placeholder-val="{{ false }}">
                           <ul style="margin:10px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:8px;">
                             <sc-for list="{{ e.bullets }}" as="b" hint-placeholder-count="3"><li style="font:var(--paragraph-sm);color:var(--text-sub-500);">{{ b }}</li></sc-for>
@@ -739,26 +760,30 @@
             </div>
           </sc-if>
         </section>
+        </section>
         </sc-if>
 
         <!-- ===== ACTIVE / ENDED CALL (middle + right) ===== -->
         <sc-if value="{{ showCall }}" hint-placeholder-val="{{ false }}">
-        <section style="flex: 1; min-width: 0; display: flex; flex-direction: column; background-color: #F1F7FF">
+        <section class="tc-chatbox" style="flex: 1; min-width: 480px; position:relative; margin:16px 32px 16px 0; border:1px solid var(--stroke-soft-200); border-radius:16px; overflow:hidden; display: flex; flex-direction: column; background-color: #F1F7FF">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 24px;border-bottom:1px solid var(--stroke-soft-200);background:var(--bg-white-0);flex:0 0 auto;height:72px;box-sizing:border-box;">
-            <div style="display:flex;align-items:center;gap:18px;">
-              <sc-if value="{{ callLive }}" hint-placeholder-val="{{ false }}"><div style="display:flex;align-items:center;gap:8px;font:var(--label-sm);letter-spacing:var(--label-sm-spacing);color:var(--state-success);"><span style="width:8px;height:8px;border-radius:999px;background:var(--state-success);"></span>Active call</div></sc-if>
-              <sc-if value="{{ callEnded }}" hint-placeholder-val="{{ true }}"><div style="display:flex;align-items:center;gap:8px;font:var(--label-sm);letter-spacing:var(--label-sm-spacing);color:var(--text-sub-500);"><span style="width:8px;height:8px;border-radius:999px;background:var(--text-soft-400);"></span>Call ended</div></sc-if>
-              <div style="display:flex;align-items:center;gap:6px;font:var(--label-sm);letter-spacing:var(--label-sm-spacing);color:var(--text-sub-500);"><i class="ri-time-line"></i>{{ callTime }}</div>
+            <div style="display:flex;align-items:center;gap:20px;">
+              <div style="display:flex;align-items:center;gap:10px;font:var(--label-md);letter-spacing:var(--label-md-spacing);color:var(--text-main-900);"><i class="ri-chat-3-line" style="color:var(--icon-sub-500);font-size:20px;"></i>Communication</div>
+              <div style="display:flex;align-items:center;gap:12px;">
+                <sc-if value="{{ callLive }}" hint-placeholder-val="{{ false }}"><div style="display:flex;align-items:center;gap:8px;font:var(--label-sm);letter-spacing:var(--label-sm-spacing);color:var(--state-success);"><span style="width:8px;height:8px;border-radius:999px;background:var(--state-success);"></span>Active call</div></sc-if>
+                <sc-if value="{{ callEnded }}" hint-placeholder-val="{{ true }}"><div style="display:flex;align-items:center;gap:8px;font:var(--label-sm);letter-spacing:var(--label-sm-spacing);color:var(--text-sub-500);"><span style="width:8px;height:8px;border-radius:999px;background:var(--text-soft-400);"></span>Call ended</div></sc-if>
+                <span style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--bg-weak-100);font:var(--label-sm);letter-spacing:var(--label-sm-spacing);color:var(--text-sub-500);"><i class="ri-time-line"></i>{{ callTime }}</span>
+              </div>
             </div>
             <div style="display:flex;align-items:center;gap:10px;">
               <sc-if value="{{ callLive }}" hint-placeholder-val="{{ false }}">
               <button onClick="{{ toggleHold }}" style="{{ holdBtnStyle }}"><i class="ri-pause-line"></i></button>
               <button onClick="{{ toggleMute }}" style="{{ muteBtnStyle }}"><i class="ri-mic-off-line"></i></button>
               <button onClick="{{ toggleSpeaker }}" style="{{ speakerBtnStyle }}"><i class="ri-volume-up-line"></i></button>
-              <button onClick="{{ endCall }}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0 16px;border-radius:10px;border:none;background:var(--red-base);color:#fff;font:var(--label-sm);letter-spacing:var(--label-sm-spacing);cursor:pointer;"><i class="ri-phone-fill" style="transform:rotate(135deg);"></i>End Call</button>
+              <button onClick="{{ endCall }}" style="display:flex;align-items:center;justify-content:center;min-width:132px;gap:8px;height:40px;padding:0 16px;border-radius:10px;border:none;background:var(--red-base);color:#fff;font:var(--label-sm);letter-spacing:var(--label-sm-spacing);cursor:pointer;"><i class="ri-phone-fill" style="transform:rotate(135deg);"></i>End Call</button>
               </sc-if>
               <sc-if value="{{ callEnded }}" hint-placeholder-val="{{ true }}">
-              <button onClick="{{ startCall }}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0 16px;border-radius:10px;border:1px solid var(--orange-base);background:var(--orange-lighter);color:var(--orange-base);font:var(--label-sm);letter-spacing:var(--label-sm-spacing);cursor:pointer;"><i class="ri-phone-line"></i>Call again</button>
+              <button onClick="{{ startCall }}" style="display: flex; align-items: center; justify-content: center; min-width: 132px; gap: 8px; height: 40px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--orange-base); color: var(--orange-base); font: var(--label-sm); letter-spacing: var(--label-sm-spacing); cursor: pointer; background-color: #FEFEFE"><i class="ri-phone-line"></i>Call again</button>
               </sc-if>
               <div style="width:1px;height:24px;background:var(--stroke-soft-200);"></div>
               <button onClick="{{ sendWhatsapp }}" title="WhatsApp" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;border:1px solid var(--stroke-soft-200);background:var(--bg-white-0);color:var(--orange-base);font-size:18px;cursor:pointer;"><i class="ri-whatsapp-line"></i></button>
@@ -766,14 +791,14 @@
               <button onClick="{{ sendSchedule }}" title="Schedule Call" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;border:1px solid var(--stroke-soft-200);background:var(--bg-white-0);color:var(--orange-base);font-size:18px;cursor:pointer;"><i class="ri-calendar-line"></i></button>
             </div>
           </div>
-          <div ref="{{ setTranscriptRef }}" style="flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:20px;">
+          <div ref="{{ setTranscriptRef }}" class="tc-chatbody" style="flex:1;overflow-y:auto;padding:24px max(calc(30% + 32px), 312px) 24px 24px;display:flex;flex-direction:column;gap:20px;background:#F4FBFF;">
             <div style="font:var(--label-md);letter-spacing:var(--label-md-spacing);color:var(--text-main-900);">Live Transcript</div>
 
             <sc-for list="{{ visibleMsgs }}" as="m" hint-placeholder-count="0">
               <div class="tc-bubble">
                 <sc-if value="{{ m.isAgent }}" hint-placeholder-val="{{ true }}">
                   <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
-                    <div style="max-width:550px;background:linear-gradient(135deg,#F3965B 0%,#FE6A0C 100%);color:#fff;border-radius:16px 16px 4px 16px;padding:12px 16px;font:var(--paragraph-md);box-shadow:0 6px 16px -6px rgba(254,106,12,0.5);">{{ m.text }}</div>
+                    <div style="max-width: 550px; background: linear-gradient(135deg, #D8EFFFEB, #B9E3FFEB); color: #0071BF; border-radius: 16px 16px 4px 16px; padding: 12px 16px; font: var(--paragraph-md); box-shadow: 0px 0px 0px 0px #24A6FF80">{{ m.text }}</div>
                     <span style="font:var(--paragraph-xs);color:var(--text-soft-400);">{{ m.time }}</span>
                   </div>
                 </sc-if>
@@ -869,15 +894,15 @@
               </div>
             </sc-if>
           </div>
-        </section>
 
-        <section class="tc-detail-right" style="width:440px;flex:0 0 440px;border-left:1px solid var(--stroke-soft-200);display:flex;flex-direction:column;overflow-y:auto;padding:20px;gap:18px;background:var(--bg-white-0);">
+          <section class="tc-detail-right" style="position:absolute;top:84px;right:16px;bottom:16px;width:30%;min-width:280px;border:1px solid var(--stroke-soft-200);border-radius:16px;box-shadow:var(--shadow-regular-md);display:flex;flex-direction:column;overflow-y:auto;padding:20px;gap:18px;background:var(--bg-white-0);z-index:5;">
           <div style="display:flex;gap:4px;background:var(--bg-weak-100);border-radius:10px;padding:4px;">
             <div onClick="{{ setOverview }}" style="{{ ovSeg }}"><i class="{{ ovIconCls }}"></i>Overview</div>
             <div onClick="{{ setNinja }}" style="{{ njSeg }}"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex:0 0 auto;color:{{ njIcon }};"><g clip-path="url(#clip0_call)"><path d="M13.0824 4.32045L13.3304 4.7718C13.3745 4.85219 13.3153 4.95037 13.2239 4.94905L10.2066 5.09665C9.98561 5.10719 9.79091 5.2449 9.70671 5.44982L8.96934 7.24469C8.90159 7.35473 8.74109 7.35078 8.6786 7.23745L8.4714 6.85923C7.73205 5.51242 7.77152 3.87107 8.57467 2.56116C8.75096 2.27387 9.06669 2.10058 9.40413 2.10519C10.9387 2.1276 12.3431 2.97298 13.0824 4.32045Z" fill="currentColor"></path><path d="M16.7001 9.59907L16.4251 10.0346C16.3765 10.1124 16.262 10.1077 16.2186 10.0267L14.6327 7.45168C14.5169 7.26323 14.3025 7.15912 14.0828 7.18416L12.1581 7.40358C12.0292 7.39765 11.9548 7.25467 12.0239 7.14529L12.2541 6.78091C13.0744 5.4822 14.5281 4.72379 16.0614 4.79627C16.3988 4.81208 16.7027 5.00449 16.8612 5.30363C17.5828 6.66033 17.5216 8.30102 16.7007 9.59973L16.7001 9.59907Z" fill="currentColor"></path><path d="M14.1094 15.439L13.5951 15.4489C13.5036 15.4509 13.4438 15.3527 13.4878 15.2723L14.7606 12.5279C14.854 12.327 14.8225 12.0904 14.6811 11.9204L13.4378 10.432C13.3721 10.3206 13.4503 10.1796 13.5793 10.1776L14.0101 10.1697C15.5447 10.1407 16.9761 10.9387 17.7601 12.2604C17.9325 12.551 17.9397 12.9114 17.7779 13.2086C17.0445 14.5587 15.644 15.4107 14.1094 15.4397V15.439Z" fill="currentColor"></path><path d="M7.46082 15.3969L7.24901 14.9277C7.21152 14.8441 7.27729 14.7505 7.36873 14.7591L10.3879 14.846C10.609 14.8526 10.8135 14.7301 10.9135 14.5324L11.7877 12.8008C11.8633 12.696 12.0238 12.7125 12.0771 12.8304L12.2547 13.2231C12.8875 14.6233 12.7211 16.2568 11.8186 17.5001C11.62 17.7736 11.2924 17.9225 10.9563 17.8909C9.42824 17.7492 8.0936 16.7971 7.46082 15.3962V15.3969Z" fill="currentColor"></path><path d="M3.74729 10.2975L4.02224 9.86196C4.07092 9.78421 4.18537 9.78882 4.22879 9.86987L5.8147 12.4449C5.93047 12.6333 6.1449 12.7374 6.3646 12.7124L8.28927 12.493C8.4182 12.4989 8.49253 12.6419 8.42346 12.7513L8.19323 13.1157C7.37298 14.4144 5.91928 15.1728 4.386 15.1003C4.04855 15.0845 3.74466 14.8921 3.58613 14.5929C2.86455 13.2362 2.92572 11.5956 3.74663 10.2968L3.74729 10.2975Z" fill="currentColor"></path><path d="M6.60571 4.63879L7.11944 4.66712C7.21087 4.67239 7.26284 4.77452 7.2135 4.85162L5.74205 7.49385C5.63417 7.68757 5.64798 7.92543 5.77691 8.10532L6.90698 9.68209C6.9642 9.79806 6.87606 9.93247 6.74714 9.92523L6.31695 9.90151C4.78497 9.81717 3.41547 8.91512 2.73138 7.53931C2.58075 7.23687 2.60048 6.87711 2.78335 6.59246C3.61412 5.30033 5.07374 4.55445 6.60637 4.63879H6.60571Z" fill="currentColor"></path><path d="M10.5631 8.84141L10.6904 9.08999C10.8318 9.36559 11.0562 9.58823 11.3324 9.72657L11.5558 9.83897C11.586 9.8541 11.586 9.89842 11.5558 9.91355L11.2515 10.0649C11.0195 10.1805 10.8318 10.3686 10.7163 10.6009L10.5642 10.9079C10.5491 10.9381 10.506 10.9392 10.4908 10.9079L10.3161 10.5761C10.2092 10.374 10.0452 10.2086 9.84457 10.1005L9.49499 9.91247C9.46586 9.89734 9.46586 9.85518 9.49499 9.83897L9.85643 9.64227C10.0377 9.54392 10.1866 9.39477 10.2869 9.21428L10.4919 8.84033C10.5081 8.81115 10.5502 8.81223 10.5653 8.84033L10.5631 8.84141Z" fill="currentColor"></path></g><defs><clipPath id="clip0_call"><rect width="15.2632" height="15.7895" fill="white" transform="translate(2.63135 2.10522)"></rect></clipPath></defs></svg>NinjaAI</div>
           </div>
 
           <sc-if value="{{ rtOverview }}" hint-placeholder-val="{{ true }}">
+          <div class="tc-fade" style="display:flex;flex-direction:column;gap:18px;">
           <div>
             <div style="font:var(--subheading-xs);letter-spacing:var(--subheading-xs-spacing);text-transform:uppercase;color:var(--text-soft-400);margin-bottom:10px;">Next Best Action</div>
             <sc-if value="{{ nbaWaiting }}" hint-placeholder-val="{{ true }}">
@@ -924,7 +949,7 @@
             </sc-if>
           </div>
 
-          <div>
+          <div style="position: sticky; bottom: -20px; margin: auto -20px -20px; background: var(--bg-white-0); padding: 14px 20px 20px; border-top: 1px solid var(--stroke-soft-200); z-index: 2; border-width: 0px">
             <div style="font:var(--subheading-xs);letter-spacing:var(--subheading-xs-spacing);text-transform:uppercase;color:var(--text-soft-400);margin-bottom:10px;">Call Notes</div>
             <div style="border:1px solid var(--stroke-soft-200);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:14px;">
               <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font:var(--label-sm);letter-spacing:var(--label-sm-spacing);color:var(--text-main-900);">AI Summary</span>
@@ -938,18 +963,19 @@
               <sc-if value="{{ notesReady }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-wrap:wrap;gap:8px;"><sc-for list="{{ smartTags }}" as="t" hint-placeholder-count="3"><span class="{{ t.cls }}" style="{{ t.style }}"><sc-if value="{{ t.dot }}" hint-placeholder-val="{{ false }}"><span style="width:6px;height:6px;border-radius:999px;background:{{ t.dot }};"></span></sc-if><sc-if value="{{ t.ai }}" hint-placeholder-val="{{ true }}"></sc-if><span style="font-size: 14px">{{ t.label }}</span></span></sc-for></div></sc-if>
               <div style="font:var(--paragraph-xs);color:var(--text-soft-400);">The summary and tags will be saved as disposition for this lead.</div>
               <sc-if value="{{ notesPending }}" hint-placeholder-val="{{ true }}"><button style="height:44px;border-radius:10px;border:none;background:var(--bg-weak-100);color:var(--text-disabled-300);font:var(--label-sm);letter-spacing:var(--label-sm-spacing);cursor:not-allowed;">Save Disposition</button></sc-if>
-              <sc-if value="{{ notesReady }}" hint-placeholder-val="{{ false }}"><button style="height:44px;border-radius:10px;border:1px solid var(--stroke-soft-200);background:var(--bg-white-0);color:var(--orange-base);font:var(--label-sm);letter-spacing:var(--label-sm-spacing);cursor:pointer;">Save Disposition</button></sc-if>
+              <sc-if value="{{ notesReady }}" hint-placeholder-val="{{ false }}"><button style="height: 44px; border-radius: 10px; border: 1px solid var(--stroke-soft-200); color: var(--orange-base); font: var(--label-sm); letter-spacing: var(--label-sm-spacing); cursor: pointer; background-color: #FEF3EB; border-width: 0px">Save Disposition</button></sc-if>
             </div>
+          </div>
           </div>
           </sc-if>
 
           <sc-if value="{{ rtNinja }}" hint-placeholder-val="{{ false }}">
-          <div style="flex:1;min-height:0;display:flex;flex-direction:column;">
+          <div class="tc-fade" style="flex:1;min-height:0;display:flex;flex-direction:column;">
 
             <sc-if value="{{ njLanding }}" hint-placeholder-val="{{ true }}">
             <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 8px 0; padding-top: 64px">
               <h2 style="margin: 0; font: var(--title-h3); letter-spacing: var(--title-h3-spacing); color: var(--text-main-900); font-size: 24px">How can i help<br>you <span style="color:var(--text-soft-400);">Manish?</span></h2>
-              <p style="margin:16px 0 0;font:var(--paragraph-md);color:var(--text-sub-500);max-width:340px;">You can ask about product concerns, services, quotes or best offers.</p>
+              <p style="margin:8px 0 0;font:var(--paragraph-md);color:var(--text-sub-500);max-width:340px;">You can ask about product concerns, services, quotes or best offers.</p>
               <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:28px;">
                 <div class="tc-quickpill" style="display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border:1px solid var(--stroke-soft-200);border-radius:10px;background:var(--bg-white-0);font:var(--label-sm);letter-spacing:var(--label-sm-spacing);color:var(--text-main-900);cursor:pointer;"><i class="ri-umbrella-fill" style="color:var(--icon-strong-900);font-size:18px;"></i>Coverage Explanation</div>
                 <div class="tc-quickpill" style="display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border:1px solid var(--stroke-soft-200);border-radius:10px;background:var(--bg-white-0);font:var(--label-sm);letter-spacing:var(--label-sm-spacing);color:var(--text-main-900);cursor:pointer;"><i class="ri-star-fill" style="color:var(--yellow-base);font-size:18px;"></i>Premium Objections</div>
@@ -963,7 +989,7 @@
             </sc-if>
 
             <sc-if value="{{ njActive }}" hint-placeholder-val="{{ false }}">
-            <div ref="{{ setNjScrollRef }}" style="flex:1;min-height:0;overflow-y:auto;padding:42px 2px 16px;display:flex;flex-direction:column;gap:18px;">
+            <div class="tc-njscroll" ref="{{ setNjScrollRef }}" style="flex:1;min-height:0;overflow-y:auto;padding:42px 2px 16px;display:flex;flex-direction:column;gap:18px;">
               <sc-for list="{{ njLog }}" as="e" hint-placeholder-count="4">
                 <sc-if value="{{ e.isUser }}" hint-placeholder-val="{{ false }}">
                   <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
@@ -981,11 +1007,17 @@
                     <div style="font:var(--paragraph-sm);color:var(--text-sub-500);">{{ e.note }}</div>
                   </div>
                 </sc-if>
+                <sc-if value="{{ e.isThinking }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;gap:10px;align-items:center;">
+                    <span style="flex:0 0 auto;width:6px;height:6px;border-radius:999px;background:#B93FE0;"></span>
+                    <span style="display:inline-flex;align-items:center;gap:4px;"><span class="tc-think-dot"></span><span class="tc-think-dot d1"></span><span class="tc-think-dot d2"></span></span>
+                  </div>
+                </sc-if>
                 <sc-if value="{{ e.isAi }}" hint-placeholder-val="{{ false }}">
                   <div style="display:flex;gap:10px;">
                     <span style="flex:0 0 auto;width:6px;height:6px;border-radius:999px;background:#B93FE0;margin-top:7px;"></span>
                     <div style="flex:1;min-width:0;">
-                      <div style="font:var(--paragraph-sm);color:var(--text-main-900);">{{ e.text }}</div>
+                      <div style="font:var(--paragraph-sm);color:var(--text-main-900);">{{ e.text }}<sc-if value="{{ e.streaming }}" hint-placeholder-val="{{ false }}"><span class="tc-cursor"></span></sc-if></div>
                       <sc-if value="{{ e.bullets }}" hint-placeholder-val="{{ false }}">
                         <ul style="margin:10px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:8px;">
                           <sc-for list="{{ e.bullets }}" as="b" hint-placeholder-count="3"><li style="font:var(--paragraph-sm);color:var(--text-sub-500);">{{ b }}</li></sc-for>
@@ -1052,6 +1084,7 @@
           </div>
           </sc-if>
         </section>
+        </section>
         </sc-if>
 
       </div>
@@ -1085,10 +1118,54 @@ class Component extends DCLogic {
 
   njNowTime() { return new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }); }
 
-  njReset = () => { clearTimeout(this._njTimer); this.setState({ njConvo: null, njLog: [] }); };
+  njReset = () => { this.njClearTimers(); this.setState({ njConvo: null, njLog: [] }); };
+
+  njClearTimers() { clearTimeout(this._njTimer); clearInterval(this._njStream); }
+
+  // Push a user bubble, show a "thinking" shimmer, then stream the AI response in.
+  njRespond(userText, buildEntries) {
+    this.njClearTimers();
+    const time = this.njNowTime();
+    this.setState(s => ({ njLog: [
+      ...s.njLog,
+      ...(userText ? [{ isUser: true, text: userText, time }] : []),
+      { isThinking: true },
+    ] }));
+    const delay = 750 + Math.random() * 750;
+    this._njTimer = setTimeout(() => {
+      const entries = buildEntries() || [];
+      this.setState(s => ({ njLog: s.njLog.filter(e => !e.isThinking) }));
+      this.njStreamEntries(entries);
+    }, delay);
+  }
+
+  // Reveal entries; if the first is an AI text bubble, type it out character-by-character.
+  njStreamEntries(entries) {
+    const first = entries[0];
+    if (first && first.isAi && first.text) {
+      const full = first.text;
+      const bullets = first.bullets;
+      const rest = entries.slice(1);
+      const step = Math.max(1, Math.round(full.length / 42));
+      this.setState(s => ({ njLog: [...s.njLog, { isAi: true, text: '', streaming: true }] }));
+      let i = 0;
+      this._njStream = setInterval(() => {
+        i += step;
+        const slice = full.slice(0, i);
+        this.setState(s => { const log = [...s.njLog]; const idx = log.length - 1; if (idx >= 0) log[idx] = { ...log[idx], text: slice, streaming: true }; return { njLog: log }; });
+        if (i >= full.length) {
+          clearInterval(this._njStream);
+          this.setState(s => { const log = [...s.njLog]; const idx = log.length - 1; if (idx >= 0) log[idx] = { isAi: true, text: full, bullets }; return { njLog: log }; });
+          if (rest.length) this._njTimer = setTimeout(() => this.setState(s => ({ njLog: [...s.njLog, ...rest] })), 300);
+        }
+      }, 26);
+    } else {
+      this.setState(s => ({ njLog: [...s.njLog, ...entries] }));
+    }
+  }
 
   njStartRenewal = () => {
-    clearTimeout(this._njTimer);
+    this.njClearTimers();
     this.setState({
       njConvo: 'renewal',
       njLog: [
@@ -1096,32 +1173,23 @@ class Component extends DCLogic {
         { isFaq: true, chips: ['Why renewal?', 'Is renewal mandatory?', "What if I don't renew?"], note: 'Third-party insurance is legally mandatory. Comprehensive insurance is optional but strongly recommended.' },
       ],
     });
-    this._njTimer = setTimeout(() => {
-      this.setState(s => ({
-        njLog: [
-          ...s.njLog,
-          { isUser: true, text: 'Customer is saying prices are high', time: this.njNowTime() },
-          { isAi: true, text: 'I understand the concern about the price. Here are few pointer to justify the pricing.', bullets: [
-            'Zero paperwork hassle with full claim assistance from our team.',
-            'Genuine parts & expert technicians for long-term reliability.',
-            'Saves your time, money, and stress when you need it most.',
-          ] },
-          { isRelated: true, items: [
-            { key: 'reduce', label: 'Ways to reduce premium', icon: 'ri-percent-line' },
-            { key: 'compare', label: 'Compare competition', icon: 'ri-price-tag-3-line' },
-            { key: 'cheaper', label: 'Other cheaper options', icon: 'ri-question-line' },
-          ].map(it => ({ ...it, onClick: () => this.njRelatedClick(it.key) })) },
-        ],
-      }));
-    }, 900);
+    setTimeout(() => this.njRespond('Customer is saying prices are high', () => [
+      { isAi: true, text: 'I understand the concern about the price. Here are few pointer to justify the pricing.', bullets: [
+        'Zero paperwork hassle with full claim assistance from our team.',
+        'Genuine parts & expert technicians for long-term reliability.',
+        'Saves your time, money, and stress when you need it most.',
+      ] },
+      { isRelated: true, items: [
+        { key: 'reduce', label: 'Ways to reduce premium', icon: 'ri-percent-line' },
+        { key: 'compare', label: 'Compare competition', icon: 'ri-price-tag-3-line' },
+        { key: 'cheaper', label: 'Other cheaper options', icon: 'ri-question-line' },
+      ].map(it => ({ ...it, onClick: () => this.njRelatedClick(it.key) })) },
+    ]), 700);
   };
 
   njRelatedClick = (key) => {
-    const time = this.njNowTime();
     if (key === 'compare') {
-      this.setState(s => ({ njLog: [
-        ...s.njLog,
-        { isUser: true, text: 'Compare competition', time },
+      this.njRespond('Compare competition', () => [
         { isAi: true, text: 'Sure, Here\u2019s the competitor analysis emphasising ICICI Lombard\u2019s features and service quality:' },
         { isCard: true, title: 'Premium Comparison', badge1: 'L', badge2: 'Competitors', rows: [
           { label: 'Zero Depreciation', c1Icon: 'ri-check-line', c1Color: 'var(--green-base)', c2Icon: 'ri-close-line', c2Color: 'var(--red-base)' },
@@ -1135,48 +1203,36 @@ class Component extends DCLogic {
           { key: 'pitch', label: 'Pitch to share with customer', icon: 'ri-price-tag-3-line' },
           { key: 'share', label: 'Share with customer', icon: 'ri-share-forward-line' },
         ].map(it => ({ ...it, onClick: () => this.njRelatedClick(it.key) })) },
-      ] }));
+      ]);
     } else if (key === 'share') {
-      this.setState(s => ({ njLog: [
-        ...s.njLog,
-        { isUser: true, text: 'Share with customer', time },
+      this.njRespond('Share with customer', () => [
         { isOptions: true, text: 'Sure, how would you like to share', options: [
           { key: 'mail', label: 'Send via Mail', icon: 'ri-mail-line' },
           { key: 'whatsapp', label: 'Send via Whatsapp', icon: 'ri-whatsapp-line' },
         ].map(it => ({ ...it, onClick: () => this.njRelatedClick(it.key) })) },
-      ] }));
+      ]);
     } else if (key === 'mail' || key === 'whatsapp') {
       const channel = key === 'mail' ? 'Mail' : 'WhatsApp';
-      this.pushAction(key);
-      this.setState(s => ({ njLog: [
-        ...s.njLog,
-        { isUser: true, text: 'Send via ' + channel, time },
-        { isAi: true, text: 'Shared the competitor comparison with the customer via ' + channel + '.' },
-      ] }));
+      this.njRespond('Send via ' + channel, () => {
+        this.pushAction(key);
+        return [{ isAi: true, text: 'Shared the competitor comparison with the customer via ' + channel + '.' }];
+      });
     } else if (key === 'reduce') {
-      this.setState(s => ({ njLog: [
-        ...s.njLog,
-        { isUser: true, text: 'Ways to reduce premium', time },
+      this.njRespond('Ways to reduce premium', () => [
         { isAi: true, text: 'Raising the voluntary deductible or dropping unused add-ons lowers premium. The customer\u2019s existing No-Claim Bonus already reduces it further.' },
-      ] }));
+      ]);
     } else if (key === 'cheaper') {
-      this.setState(s => ({ njLog: [
-        ...s.njLog,
-        { isUser: true, text: 'Other cheaper options', time },
+      this.njRespond('Other cheaper options', () => [
         { isAi: true, text: 'Lower IDV or dropping Zero Depreciation reduces premium, but cuts payout or claim value. Frame it as a tradeoff, not a discount.' },
-      ] }));
+      ]);
     } else if (key === 'feature') {
-      this.setState(s => ({ njLog: [
-        ...s.njLog,
-        { isUser: true, text: 'Feature comparison', time },
+      this.njRespond('Feature comparison', () => [
         { isAi: true, text: 'Zero Depreciation, Roadside Assistance, and a larger garage network are the three features that consistently win this comparison.' },
-      ] }));
+      ]);
     } else if (key === 'pitch') {
-      this.setState(s => ({ njLog: [
-        ...s.njLog,
-        { isUser: true, text: 'Pitch to share with customer', time },
+      this.njRespond('Pitch to share with customer', () => [
         { isAi: true, text: 'We\u2019re \u20B9600 higher on premium \u2014 lead with that honestly, then move straight to claim turnaround, where the gap is 48 hours.' },
-      ] }));
+      ]);
     }
   };
 
@@ -1326,6 +1382,7 @@ class Component extends DCLogic {
       const [b, c, d] = TONE[kind];
       return { label, style: TB + 'border:1px solid ' + b + ';color:' + c + ';', dot: d, cls: '', ai: false };
     };
+    const critTag = () => { const t = tag('Critical', 'red'); t.dot = ''; return t; };
 
     const ACTIVE = 'var(--state-success)';
     const EXPIRED = 'var(--state-error)';
@@ -1336,7 +1393,7 @@ class Component extends DCLogic {
         purpose: 'Follow Up', purposeSub: '3rd Renewal, MI-Other Call',
         polEnd: '25 May 2026', status: 'ACTIVE', statusColor: ACTIVE, ncb: '0%', premium: '\u20B918,234',
         commDate: '04 May 2026', commLabel: 'Call Scheduled', commSub: 'Last communication (3) : 04/12/2025',
-        tags: [tag('Hot Lead', 'red'), tag('Competitor Considering', 'pink')],
+        tags: [critTag(), tag('Competitor Considering', 'pink')],
         regNo: 'HP 12 G 3428', saleDate: '03 Dec 2022', lastPolicy: '3001/O/265044832/00', policyType: 'Comprehensive',
         insurer: 'ICICI Lombard', idv: '\u20B9 7,50,000', remarkMeta: '25 May 2026 2:15 PM', remarkVia: 'Via Call',
         remark: '\u201CCustomer requested to be contacted later due to scheduling conflicts, asking for a follow up call...\u201D', commPhone: '+91 88\u2217\u2217 \u2217\u2217\u2217\u2217 34' },
@@ -1354,7 +1411,7 @@ class Component extends DCLogic {
         purpose: 'Follow Up', purposeSub: '6th Renewal + Above',
         polEnd: '10 May 2026', status: 'EXPIRE SOON', statusColor: SOON, ncb: '0%', premium: '\u20B913,900',
         commDate: '09 Dec 2025', commLabel: 'Call Scheduled', commSub: '07/11/2025 (7)',
-        tags: [tag('Hot Lead', 'red'), tag('Callback Requested', 'blue'), tag('High Intent, Low Urgency', 'pink')],
+        tags: [critTag(), tag('Callback Requested', 'blue'), tag('High Intent, Low Urgency', 'pink')],
         regNo: 'DL 8C AF 2290', saleDate: '27 Sep 2020', lastPolicy: '3001/O/220117645/00', policyType: 'Comprehensive',
         insurer: 'Bajaj Allianz', idv: '\u20B9 5,80,000', remarkMeta: '09 Dec 2025 4:05 PM', remarkVia: 'Via Call',
         remark: '\u201CWants to renew before expiry, requested a reminder call closer to the due date.\u201D', commPhone: '+91 98\u2217\u2217 \u2217\u2217\u2217\u2217 55' },
@@ -1363,7 +1420,7 @@ class Component extends DCLogic {
         purpose: 'Renewal', purposeSub: '2nd Renewal, Booking Call',
         polEnd: '31 May 2026', status: 'ACTIVE', statusColor: ACTIVE, ncb: '20%', premium: '\u20B932,540',
         commDate: '02 May 2026', commLabel: 'Quote Shared', commSub: 'Last communication (1) : 02/05/2026',
-        tags: [tag('Hot Lead', 'red'), tag('Policy Generated', 'gray'), tag('Loyal Customer', 'green')],
+        tags: [critTag(), tag('Policy Generated', 'gray'), tag('Loyal Customer', 'green')],
         regNo: 'MH 12 PQ 4567', saleDate: '14 Feb 2023', lastPolicy: '3001/O/275663118/00', policyType: 'Comprehensive',
         insurer: 'ICICI Lombard', idv: '\u20B9 18,20,000', remarkMeta: '02 May 2026 10:15 AM', remarkVia: 'Via Email',
         remark: '\u201CReviewed the shared quote, likely to confirm renewal this week.\u201D', commPhone: '+91 99\u2217\u2217 \u2217\u2217\u2217\u2217 08' },
@@ -1381,7 +1438,7 @@ class Component extends DCLogic {
         purpose: 'Renewal', purposeSub: '1st Renewal, Booking Call',
         polEnd: '28 May 2026', status: 'ACTIVE', statusColor: ACTIVE, ncb: '0%', premium: '\u20B911,420',
         commDate: '03 May 2026', commLabel: 'Call Scheduled', commSub: 'Last communication (2) : 03/05/2026',
-        tags: [tag('Hot Lead', 'red'), tag('First Renewal', 'blue'), tag('Loyal Customer', 'green')],
+        tags: [critTag(), tag('First Renewal', 'blue'), tag('Loyal Customer', 'green')],
         regNo: 'KL 07 BX 8842', saleDate: '21 Apr 2024', lastPolicy: '3001/O/281009274/00', policyType: 'Comprehensive',
         insurer: 'Reliance General', idv: '\u20B9 6,45,000', remarkMeta: '03 May 2026 3:30 PM', remarkVia: 'Via Call',
         remark: '\u201CHappy with service, ready to renew once the payment link is shared.\u201D', commPhone: '+91 70\u2217\u2217 \u2217\u2217\u2217\u2217 33' },
@@ -1408,7 +1465,7 @@ class Component extends DCLogic {
         purpose: 'Follow Up', purposeSub: '3rd Renewal, MI-Other Call',
         polEnd: '17 May 2026', status: 'EXPIRE SOON', statusColor: SOON, ncb: '15%', premium: '\u20B919,640',
         commDate: '30 Apr 2026', commLabel: 'Call Scheduled', commSub: 'Last communication (3) : 30/04/2026',
-        tags: [tag('Hot Lead', 'red'), tag('High Intent, Low Urgency', 'pink'), tag('Loyal Customer', 'green')],
+        tags: [critTag(), tag('High Intent, Low Urgency', 'pink'), tag('Loyal Customer', 'green')],
         regNo: 'AP 28 JK 9012', saleDate: '11 Mar 2022', lastPolicy: '3001/O/239004417/00', policyType: 'Comprehensive',
         insurer: 'ICICI Lombard', idv: '\u20B9 12,80,000', remarkMeta: '30 Apr 2026 12:25 PM', remarkVia: 'Via Call',
         remark: '\u201CInterested in renewing, wants zero-dep add-on quoted separately.\u201D', commPhone: '+91 94\u2217\u2217 \u2217\u2217\u2217\u2217 71' },
@@ -1417,7 +1474,7 @@ class Component extends DCLogic {
         purpose: 'Renewal', purposeSub: '2nd Renewal, Booking Call',
         polEnd: '09 Jun 2026', status: 'ACTIVE', statusColor: ACTIVE, ncb: '20%', premium: '\u20B942,300',
         commDate: '04 May 2026', commLabel: 'Quote Shared', commSub: 'Last communication (2) : 04/05/2026',
-        tags: [tag('Hot Lead', 'red'), tag('Policy Generated', 'gray'), tag('High Value', 'purple')],
+        tags: [critTag(), tag('Policy Generated', 'gray'), tag('High Value', 'purple')],
         regNo: 'PB 10 LM 3344', saleDate: '02 Dec 2023', lastPolicy: '3001/O/271556908/00', policyType: 'Comprehensive',
         insurer: 'Tata AIG', idv: '\u20B9 24,60,000', remarkMeta: '04 May 2026 9:50 AM', remarkVia: 'Via Call',
         remark: '\u201CReady to proceed, awaiting confirmation on the add-on cover bundle.\u201D', commPhone: '+91 88\u2217\u2217 \u2217\u2217\u2217\u2217 62' },
@@ -1581,7 +1638,7 @@ class Component extends DCLogic {
       smartTags: [
         { label: 'Payment Link Sent', ai: true, cls: 'tc-aitag' },
         { label: 'Renewal Confirmed', ai: true, cls: 'tc-aitag' },
-        tag('Hot Lead', 'red'),
+        (() => { const t = tag('Critical', 'red'); t.dot = ''; return t; })(),
       ],
       rtOverview: this.state.rightTab === 'overview',
       rtNinja: this.state.rightTab === 'ninja',
