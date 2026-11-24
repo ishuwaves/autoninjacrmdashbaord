@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@0.0.86",
+        "--headless",
+        "--no-sandbox",
+        "--isolated",
+        "--browser", "chromium",
+        "--executable-path", "/opt/pw-browsers/chromium",
+        "--proxy-server", "http://127.0.0.1:32953",
+        "--allow-unrestricted-file-access",
+        "--output-dir", "/tmp/playwright-mcp"
+      ]
+    }
+  }
+}
